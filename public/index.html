@@ -78,7 +78,7 @@
         // setTextHeight();
       }
 
-      const socket = io.connect("http://localhost:3000");
+      const socket = io.connect("http://31.214.245.149:3000");
       socket.on("result", generateContent);
 
       window.addEventListener("beforeunload", function (e) {
