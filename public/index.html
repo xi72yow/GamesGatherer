@@ -7,25 +7,29 @@
       integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
       crossorigin="anonymous"
     ></script>
+    <!--<script src="exampleData.js"></script>-->
   </head>
 
   <body>
     <script>
-      function generateContent(data) {
-        let main = document.getElementById("jsRendered");
-        main.innerHTML = "";
-        let spinner = document.getElementById("spinner");
-        spinner.classList.remove("spinner");
-        console.log(data);
-        data.forEach((site) => {
-          if (site) {
-            let fieldset = document.createElement("fieldset");
-            fieldset.className = "row limited fade-delay-1";
-            let legend = document.createElement("legend");
-            legend.innerText = site[0].site;
-            fieldset.appendChild(legend);
+      function setTextHeight() {
+        let texts = document.querySelectorAll("figcaption");
+        texts.forEach((text) => {
+          textFit(text);
+        });
+      }
+      function renderCards(site, main) {
+        if (site) {
+          let fieldset = document.createElement("fieldset");
+          fieldset.className = "row limited fade-delay-1";
+          let legend = document.createElement("legend");
+          legend.innerText = site[0].site;
+          fieldset.appendChild(legend);
 
-            site.forEach((item) => {
+          site
+            .slice()
+            .reverse()
+            .forEach((item) => {
               let figure = document.createElement("figure");
               figure.className =
                 "column small-12 medium-4 large-3 fade-delay-2";
@@ -58,11 +62,21 @@
               fieldset.appendChild(figure);
             });
 
-            main.appendChild(fieldset);
-          }
-        });
+          main.appendChild(fieldset);
+        }
       }
-      //generateContent(stuff);
+
+      function generateContent(data) {
+        let main = document.getElementById("jsRendered");
+        main.innerHTML = "";
+        let spinner = document.getElementById("spinner");
+        spinner.classList.remove("spinner");
+        console.log(data);
+        data.forEach((site) => {
+          renderCards(site, main);
+        });
+        // setTextHeight();
+      }
 
       const socket = io.connect("http://localhost:3000");
       socket.on("result", generateContent);
@@ -89,7 +103,7 @@
     </script>
     <header class="row limited fade-delay-2">
       <fieldset id="spinner" class="column small-12 fade-delay-2 loader-1">
-        <legend>Game Gatherer</legend>
+        <legend>Games Gatherer</legend>
         <input type="text" id="gname" name="gname" placeholder="type here..." />
         <input type="submit" value=">" onclick="sendGameName()" />
         <p>brought to you by xi72yow</p>
@@ -105,18 +119,8 @@
     </header>
     <main id="jsRendered"></main>
 
-    <!-- <fieldset class="row limited fade-delay-1">
-      <legend>Proton</legend>
-      <figure class="column small-12 medium-4 large-3 fade-delay-2">
-        <figcaption>Borderlands 3 Ultimate Edition</figcaption>
-        <a href="https://github.com/xi72yow/DisplayConfig" target="_blank">
-          <img
-            src="https://hb.imgix.net/ed7fd04016922b01ae7c0fd3a8eb2719c3152c72.jpg?auto=compress,format&fit=crop&h=206&w=360&s=d9223470036eec788308b66572e20ece"
-          />
-        </a>
-        <figcaption class="price">19.66€</figcaption>
-        <hr class="split" />
-      </figure>
-    </fieldset>-->
+    <script>
+      //generateContent(stuff);
+    </script>
   </body>
 </html>

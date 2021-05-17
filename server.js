@@ -289,7 +289,7 @@ let server = app.listen(3000);
 app.use(express.static("public"));
 const port = 3000;
 
-console.log(`GamesHunter listening at http://localhost:${port}`);
+console.log(`GamesGatherer listening at http://localhost:${port}`);
 
 let socket = require("socket.io");
 
