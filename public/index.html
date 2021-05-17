@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="css/styles.css" rel="stylesheet" />
+    <script
+      src="https://cdn.socket.io/3.1.3/socket.io.min.js"
+      integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <script>
+      function generateContent(data) {
+        let main = document.getElementById("jsRendered");
+        main.innerHTML = "";
+        let spinner = document.getElementById("spinner");
+        spinner.classList.remove("spinner");
+        console.log(data);
+        data.forEach((site) => {
+          if (site) {
+            let fieldset = document.createElement("fieldset");
+            fieldset.className = "row limited fade-delay-1";
+            let legend = document.createElement("legend");
+            legend.innerText = site[0].site;
+            fieldset.appendChild(legend);
+
+            site.forEach((item) => {
+              let figure = document.createElement("figure");
+              figure.className =
+                "column small-12 medium-4 large-3 fade-delay-2";
+              let figcaptionName = document.createElement("figcaption");
+              figcaptionName.innerText = item.title;
+              figcaptionName.className = "name";
+              let a = document.createElement("a");
+              a.href = item.href;
+              a.setAttribute("target", "_blank");
+              let img = document.createElement("img");
+              img.src = item.img;
+              a.appendChild(img);
+
+              let figcaptionPrice = document.createElement("figcaption");
+              if (item.price.includes("svg")) {
+                figcaptionPrice.innerHTML = "No Information";
+              } else {
+                figcaptionPrice.innerHTML = item.price;
+              }
+
+              figcaptionPrice.className = "price";
+
+              let hr = document.createElement("hr");
+              hr.className = "split";
+
+              figure.appendChild(figcaptionName);
+              figure.appendChild(a);
+              figure.appendChild(figcaptionPrice);
+              figure.appendChild(hr);
+              fieldset.appendChild(figure);
+            });
+
+            main.appendChild(fieldset);
+          }
+        });
+      }
+      //generateContent(stuff);
+
+      const socket = io.connect("http://localhost:3000");
+      socket.on("result", generateContent);
+
+      window.addEventListener("beforeunload", function (e) {
+        socket.emit("end");
+        console.log("terstsss");
+      });
+
+      function test(data) {
+        console.log("recived: " + data);
+        console.log(data);
+      }
+      function sendGameName() {
+        let input = document.getElementById("gname");
+        let spinner = document.getElementById("spinner");
+        spinner.classList.add("spinner");
+        let clientData = {
+          submit: input.value,
+        };
+        console.log("sending: " + input.value);
+        socket.emit("task", clientData);
+      }
+    </script>
+    <header class="row limited fade-delay-2">
+      <fieldset id="spinner" class="column small-12 fade-delay-2 loader-1">
+        <legend>Game Gatherer</legend>
+        <input type="text" id="gname" name="gname" placeholder="type here..." />
+        <input type="submit" value=">" onclick="sendGameName()" />
+        <p>brought to you by xi72yow</p>
+      </fieldset>
+      <script type="text/javascript">
+        var input = document.getElementById("gname");
+        input.addEventListener("keypress", function (ev) {
+          if (ev.keyCode === 13 || ev.which === 13) {
+            sendGameName();
+          }
+        });
+      </script>
+    </header>
+    <main id="jsRendered"></main>
+
+    <!-- <fieldset class="row limited fade-delay-1">
+      <legend>Proton</legend>
+      <figure class="column small-12 medium-4 large-3 fade-delay-2">
+        <figcaption>Borderlands 3 Ultimate Edition</figcaption>
+        <a href="https://github.com/xi72yow/DisplayConfig" target="_blank">
+          <img
+            src="https://hb.imgix.net/ed7fd04016922b01ae7c0fd3a8eb2719c3152c72.jpg?auto=compress,format&fit=crop&h=206&w=360&s=d9223470036eec788308b66572e20ece"
+          />
+        </a>
+        <figcaption class="price">19.66€</figcaption>
+        <hr class="split" />
+      </figure>
+    </fieldset>-->
+  </body>
+</html>
