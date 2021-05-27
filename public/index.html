@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
     <link href="css/styles.css" rel="stylesheet" />
     <script
       src="https://cdn.socket.io/3.1.3/socket.io.min.js"
@@ -68,6 +71,8 @@
       }
 
       function generateContent(data) {
+        let input = document.getElementById("gname");
+        input.disabled = "";
         let main = document.getElementById("jsRendered");
         main.innerHTML = "";
         let spinner = document.getElementById("spinner");
@@ -93,6 +98,7 @@
       }
       function sendGameName() {
         let input = document.getElementById("gname");
+        input.disabled = "disabled";
         let spinner = document.getElementById("spinner");
         spinner.classList.add("spinner");
         let clientData = {

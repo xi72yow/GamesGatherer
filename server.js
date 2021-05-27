@@ -308,3 +308,31 @@ function newConnection(socket) {
     socket.emit("result", result);
   }
 }
+
+//preloaded Games
+let wishlists = ['https://store.steampowered.com/wishlist/id/xi72yow/wishlistdata/?p=0', 'https://store.steampowered.com/wishlist/profiles/76561198044456377/wishlistdata/?p=0'];
+
+const fetch = require('node-fetch');
+
+async function getImportentGames(wishlists) {
+
+  let gamesToPreload = new Array;
+
+  wishlists.forEach(url => {
+    fetch(url)
+      .then((resp) => resp.json())
+      .then(function (data) {
+        Object.entries(data).forEach(([key, value]) => {
+          gamesToPreload.push(value["name"]);
+          console.log(`${key} ${value["name"]}`);
+        });;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  });
+
+}
+
+getImportentGames(wishlists);
+
