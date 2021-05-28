@@ -315,24 +315,42 @@ let wishlists = ['https://store.steampowered.com/wishlist/id/xi72yow/wishlistdat
 const fetch = require('node-fetch');
 
 async function getImportentGames(wishlists) {
-
-  let gamesToPreload = new Array;
-
-  wishlists.forEach(url => {
-    fetch(url)
-      .then((resp) => resp.json())
-      .then(function (data) {
-        Object.entries(data).forEach(([key, value]) => {
-          gamesToPreload.push(value["name"]);
-          console.log(`${key} ${value["name"]}`);
-        });;
-      })
-      .catch(function (error) {
-        console.log(error);
+  return new Promise(async (resolve, reject) => {
+    let gamesToPreload = new Array();
+    for (let i = 0; i < wishlists.length; i++) {
+      const url = wishlists[i];
+      let resp = await fetch(url).catch((err) => {
+        console.log(err);
       });
+      let data = await resp.json().catch((err) => {
+        console.log(err);
+      });
+      Object.entries(data).forEach(([key, value]) => {
+        gamesToPreload.push(value["name"]);
+        //console.log(`${key} ${value["name"]}`);
+      });
+    }
+    resolve(Array.from(Object.values(gamesToPreload)));
+    setTimeout(function () {
+      reject("fetch not possible");
+    }, 5000);
   });
+}
+
+let oneDay = setInterval(prepareDay, 86400000);
+
+async function prepareDay() {
+
+  let array = await getImportentGames(wishlists).catch((err) => {
+    console.log(err);
+  });
+  let list = array.filter((item, index) => {
+    return array.indexOf(item) === index;
+  });
+  console.log(list);
+  console.log(array.length);
+  console.log(list.length);
 
 }
 
-getImportentGames(wishlists);
 
