@@ -310,7 +310,7 @@ function newConnection(socket) {
 }
 
 //preloaded Games
-let wishlists = ['https://store.steampowered.com/wishlist/id/xi72yow/wishlistdata/?p=0', 'https://store.steampowered.com/wishlist/profiles/76561198044456377/wishlistdata/?p=0'];
+let wishlists = ['https://store.steampowered.com/wishlist/id/xi72yow/wishlistdata/?p=0', 'https://store.steampowered.com/wishlist/profiles/76561198044456377/wishlistdata/?p=0', 'https://store.steampowered.com/wishlist/id/1timmeh/wishlistdata/?p=0'];
 
 const fetch = require('node-fetch');
 
@@ -338,7 +338,7 @@ async function getImportentGames(wishlists) {
 }
 
 let oneDay = setInterval(prepareDay, 86400000);
-
+prepareDay();
 async function prepareDay() {
 
   let array = await getImportentGames(wishlists).catch((err) => {
